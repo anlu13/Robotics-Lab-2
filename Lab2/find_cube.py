@@ -12,29 +12,53 @@ def filter_image(img, hsv_lower, hsv_upper):
     ### You might need to change the parameter values to get better results
     ###############################################################################
 def detect_blob(mask):
-    img = cv2.medianBlur(mask, 9)
-   # Set up the SimpleBlobdetector with default parameters.
+    # copy mask to img (originally was medianBlue() step)
+    img = mask
+
+    # Set up the SimpleBlobdetector with default parameters with specific values.
     params = cv2.SimpleBlobDetector_Params()
-    # Change thresholds
-    params.minThreshold = 0;
-    params.maxThreshold = 256;
-    #filter by color (on binary)
+
+    # ADD (parameter) CODE HERE
+    # blob is filtered by color
     params.filterByColor = True
-    params.blobColor = 255  # this looks at binary image 0 for looking for dark areas
-    # Filter by Area.
+    # color is dark
+    params.blobColor = 255
+
+    # blob is filtered by area
     params.filterByArea = True
-    params.minArea = 2
-    params.maxArea = 20000
-    # Filter by Circularity
+    # minimum of 350 pixel area
+    params.minArea = 350
+    # max 100,000 pixel area (unsure if even need this?)
+    params.maxArea = 100000
+
+    # blob is not circular
     params.filterByCircularity = False
-    # Filter by Convexity
+
+    # blob is not convex - cubes does not bulge outwards
     params.filterByConvexity = False
-    # Filter by Inertia
-    params.filterByInertia = False
+
+    # blob is inertia - meaning how stretched out a shape is
+    params.filterByInertia = True
+    # blobs longest side is no more than 1.5x longer than the shorter side. Needed for "angled" cubes
+    params.maxInertiaRatio = 1.5
+
+    # builds a blob detector with the given parameters
     detector = cv2.SimpleBlobDetector_create(params)
-    # Detect blobs.
+
+    # use the detector to detect blobs.
     keypoints = detector.detect(img)
-    return keypoints
+
+    # use the detector to detect blobs.
+    # keypointsImage = cv2.drawKeypoints(
+    #     img, keypoints,
+    #     np.array([]), (0, 0, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    # cv2.imshow("Blobs Detected", keypointsImage)
+    # cv2.moveWindow("Blobs Detected", 640, -75)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
+
+    return len(keypoints)
+
 
 def find_cube(img, hsv_lower, hsv_upper):
     """Find the cube in an image.
