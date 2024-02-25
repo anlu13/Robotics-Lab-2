@@ -81,6 +81,15 @@ async def run(robot: cozmo.robot.Robot):
                 # Todo: Add Motion Here
                 ################################################################
 
+                # if cube
+                    # if next to cube
+                        # jerk off
+                    # if far from cube
+                        # go to
+
+                # if no cube
+                    # spin to find cube
+
 
 
 
