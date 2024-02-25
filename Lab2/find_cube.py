@@ -57,7 +57,7 @@ def detect_blob(mask):
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
 
-    return len(keypoints)
+    return keypoints
 
 
 def find_cube(img, hsv_lower, hsv_upper):
@@ -74,10 +74,13 @@ def find_cube(img, hsv_lower, hsv_upper):
     if keypoints == []:
         return None
     
-    ###############################################################################
-    # Todo: Sort the keypoints in a certain way if multiple key points get returned
-    ###############################################################################
+    largest_keypoint = [0, 0, 0]
+
+    for kp in keypoints:
+        radius = kp.size / 2
+        if radius > largest_keypoint[2]:
+            largest_keypoint = [kp.pt[0], kp.pt[1], radius]
 
 
-    return [0, 0, 0]
+    return largest_keypoint
 
