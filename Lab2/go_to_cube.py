@@ -18,11 +18,15 @@ except ImportError:
 def nothing(x):
     pass
 
-YELLOW_LOWER = np.array([9, 115, 151])
-YELLOW_UPPER = np.array([179, 215, 255])
+YELLOW_LOWER = np.array([0, 0, 0])
+YELLOW_UPPER = np.array([255, 255, 255])
 
-GREEN_LOWER = np.array([0,0,0])
-GREEN_UPPER = np.array([179, 255, 60])
+GREEN_LOWER = np.array([0, 90, 90])
+GREEN_UPPER = np.array([50, 135, 175])
+
+CLOSE_RADIUS = 100
+
+DIRECTION_BOUND = 100
 
 # Define a decorator as a subclass of Annotator; displays the keypoint
 class BoxAnnotator(cozmo.annotate.Annotator):
@@ -65,15 +69,15 @@ async def run(robot: cozmo.robot.Robot):
         while True:
             event = await robot.world.wait_for(cozmo.camera.EvtNewRawCameraImage, timeout=30)   #get camera image
             if event.image is not None:
-                image = cv2.cvtColor(np.asarray(event.image), cv2.COLOR_BGR2RGB)
+                image = cv2.cvtColor(np.asarray(event.image), cv2.COLOR_RGB2BGR)
 
                 if mode == 1:
                     robot.camera.enable_auto_exposure = True
                 else:
-                    robot.camera.set_manual_exposure(exposure,fixed_gain)
+                    robot.camera.set_manual_exposure(exposure,gain)
 
                 #find the cube
-                cube = find_cube(image, YELLOW_LOWER, YELLOW_UPPER)
+                cube = find_cube(image, GREEN_LOWER, GREEN_UPPER)
                 print(cube)
                 BoxAnnotator.cube = cube
 
@@ -88,7 +92,23 @@ async def run(robot: cozmo.robot.Robot):
                         # go to
 
                 # if no cube
-                    # spin to find cube
+                # if cube == [0, 0, 0] or cube == None:
+                #     # spin to find cube
+                #     await robot.turn_in_place(cozmo.util.degrees(30)).wait_for_completed()
+
+                # # if cube
+                # else: 
+                #     # if cube too far right
+                #     if cube[0] > robot.camera_config.center.x + DIRECTION_BOUND:
+                #         # turn right slightly
+                #         await robot.turn_in_place(cozmo.util.degrees(-5)).wait_for_completed()
+                #     # if cube too far left
+                #     elif cube[0] < robot.camera_config.center.x - DIRECTION_BOUND:
+                #         # turn left slightly
+                #         await robot.turn_in_place(cozmo.util.degrees(-5)).wait_for_completed()
+                #     # if far from cube
+                #     #elif cube[2] < CLOSE_RADIUS:
+
 
 
 
