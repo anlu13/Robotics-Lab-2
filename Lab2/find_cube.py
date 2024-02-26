@@ -3,12 +3,17 @@ import numpy as np
 import time
 
 def filter_image(img, hsv_lower, hsv_upper):
+
     cv2.imwrite("img.png", img)
+
     hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     blurred_hsv = cv2.medianBlur(hsv_img, 11)
     mask = cv2.inRange(blurred_hsv, hsv_lower, hsv_upper)
+
     cv2.imwrite("mask.png", mask)
+
     return mask
+
 
     ###############################################################################
     ### You might need to change the parameter values to get better results
@@ -78,6 +83,10 @@ def find_cube(img, hsv_lower, hsv_upper):
     if keypoints == []:
         return None
     
+    ###############################################################################
+    # Todo: Sort the keypoints in a certain way if multiple key points get returned
+    ###############################################################################
+
     largest_keypoint = [0, 0, 0]
 
     for kp in keypoints:
@@ -85,8 +94,8 @@ def find_cube(img, hsv_lower, hsv_upper):
         if radius > largest_keypoint[2]:
             largest_keypoint = [kp.pt[0], kp.pt[1], radius]
 
-    print(len(keypoints))
 
+    print("Cubes Found:", len(keypoints))
 
     return largest_keypoint
 

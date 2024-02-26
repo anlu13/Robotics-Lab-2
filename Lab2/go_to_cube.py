@@ -18,11 +18,17 @@ except ImportError:
 def nothing(x):
     pass
 
-YELLOW_LOWER = np.array([0, 0, 0])
-YELLOW_UPPER = np.array([255, 255, 255])
+# YELLOW_LOWER = np.array([0, 0, 0])
+# YELLOW_UPPER = np.array([255, 255, 255])
 
-GREEN_LOWER = np.array([0, 90, 90])
-GREEN_UPPER = np.array([50, 135, 175])
+# GREEN_LOWER = np.array([0, 90, 90])
+# GREEN_UPPER = np.array([50, 135, 175])
+
+YELLOW_LOWER = np.array([10, 165, 118])
+YELLOW_UPPER = np.array([80, 255, 255])
+
+GREEN_LOWER = np.array([0, 0, 0])
+GREEN_UPPER = np.array([175, 255, 66])
 
 CLOSE_RADIUS = 100
 
@@ -77,7 +83,7 @@ async def run(robot: cozmo.robot.Robot):
                     robot.camera.set_manual_exposure(exposure,gain)
 
                 #find the cube
-                cube = find_cube(image, GREEN_LOWER, GREEN_UPPER)
+                cube = find_cube(image, YELLOW_LOWER, YELLOW_UPPER)
                 print(cube)
                 BoxAnnotator.cube = cube
 
@@ -108,6 +114,11 @@ async def run(robot: cozmo.robot.Robot):
                 #         await robot.turn_in_place(cozmo.util.degrees(-5)).wait_for_completed()
                 #     # if far from cube
                 #     #elif cube[2] < CLOSE_RADIUS:
+
+                if cube:
+                    #robot.say_text("Hello World")
+                    print("cube")
+
 
 
 
