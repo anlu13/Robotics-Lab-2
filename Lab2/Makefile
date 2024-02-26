@@ -1,3 +1,3 @@
 make:
 	clear
-	python3 "find_cube.py"
+	python3 "go_to_cube.py"
