@@ -18,15 +18,14 @@ except ImportError:
 def nothing(x):
     pass
 
-YELLOW_LOWER = np.array([0, 0, 0])
-YELLOW_UPPER = np.array([255, 255, 255])
+DEBUG = False;
 
-GREEN_LOWER = np.array([0, 90, 90])
-GREEN_UPPER = np.array([50, 135, 175])
+YELLOW_LOWER = np.array([10, 60, 118])
+YELLOW_UPPER = np.array([80, 255, 230])
 
-CLOSE_RADIUS = 100
-
-DIRECTION_BOUND = 100
+CLOSE_RADIUS = 60
+CENTER_X = 160
+DIRECTION_BOUND = 10
 
 # Define a decorator as a subclass of Annotator; displays the keypoint
 class BoxAnnotator(cozmo.annotate.Annotator):
@@ -77,7 +76,7 @@ async def run(robot: cozmo.robot.Robot):
                     robot.camera.set_manual_exposure(exposure,gain)
 
                 #find the cube
-                cube = find_cube(image, GREEN_LOWER, GREEN_UPPER)
+                cube = find_cube(image, YELLOW_LOWER, YELLOW_UPPER)
                 print(cube)
                 BoxAnnotator.cube = cube
 
@@ -85,29 +84,31 @@ async def run(robot: cozmo.robot.Robot):
                 # Todo: Add Motion Here
                 ################################################################
 
-                # if cube
-                    # if next to cube
-                        # jerk off
-                    # if far from cube
-                        # go to
-
                 # if no cube
-                # if cube == [0, 0, 0] or cube == None:
-                #     # spin to find cube
-                #     await robot.turn_in_place(cozmo.util.degrees(30)).wait_for_completed()
+                if cube == [0, 0, 0] or cube == None:
+                    if DEBUG:
+                        print("no cube")
+                    # spin to find cube
+                    await robot.turn_in_place(cozmo.util.degrees(30)).wait_for_completed()
 
-                # # if cube
-                # else: 
-                #     # if cube too far right
-                #     if cube[0] > robot.camera_config.center.x + DIRECTION_BOUND:
-                #         # turn right slightly
-                #         await robot.turn_in_place(cozmo.util.degrees(-5)).wait_for_completed()
-                #     # if cube too far left
-                #     elif cube[0] < robot.camera_config.center.x - DIRECTION_BOUND:
-                #         # turn left slightly
-                #         await robot.turn_in_place(cozmo.util.degrees(-5)).wait_for_completed()
-                #     # if far from cube
-                #     #elif cube[2] < CLOSE_RADIUS:
+                # if cube
+                else: 
+                    print("cube")
+                    # if cube too far right
+                    if cube[0] > CENTER_X + DIRECTION_BOUND:
+                        print("R")
+                        # turn right slightly
+                        await robot.turn_in_place(cozmo.util.degrees(-3)).wait_for_completed()
+                    # if cube too far left
+                    elif cube[0] < CENTER_X - DIRECTION_BOUND:
+                        print("L")
+                        # turn left slightly
+                        await robot.turn_in_place(cozmo.util.degrees(3)).wait_for_completed()
+                    # if far from cube
+                    elif cube[2] < CLOSE_RADIUS:
+                        print("moving")
+                        await robot.drive_straight(cozmo.util.distance_inches(1), cozmo.util.speed_mmps(50)).wait_for_completed()
+
 
 
 
