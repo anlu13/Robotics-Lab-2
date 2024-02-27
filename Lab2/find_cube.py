@@ -3,9 +3,15 @@ import numpy as np
 import time
 
 def filter_image(img, hsv_lower, hsv_upper):
+    cv2.imwrite("img.png", img)
+
+
     hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     blurred_hsv = cv2.medianBlur(hsv_img, 11)
     mask = cv2.inRange(blurred_hsv, hsv_lower, hsv_upper)
+
+    # cv2.imwrite("mask.png", mask)
+
     return mask
 
     ###############################################################################
@@ -60,6 +66,9 @@ def detect_blob(mask):
     # cv2.destroyAllWindows()
 
     marked_mask = cv2.drawKeypoints(mask, keypoints, np.array([]), (0, 0, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+
+    cv2.imwrite("marked_mask.png", marked_mask)
+
 
     return keypoints
 
