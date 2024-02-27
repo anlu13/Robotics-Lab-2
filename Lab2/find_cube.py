@@ -3,11 +3,9 @@ import numpy as np
 import time
 
 def filter_image(img, hsv_lower, hsv_upper):
-    cv2.imwrite("img.png", img)
     hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     blurred_hsv = cv2.medianBlur(hsv_img, 11)
     mask = cv2.inRange(blurred_hsv, hsv_lower, hsv_upper)
-    cv2.imwrite("mask.png", mask)
     return mask
 
     ###############################################################################
@@ -29,13 +27,13 @@ def detect_blob(mask):
     # blob is filtered by area
     params.filterByArea = True
     # minimum of 350 pixel area
-    params.minArea = 1500
+    params.minArea = 300
     # max 100,000 pixel area (unsure if even need this?)
-    params.maxArea = 100000
+    params.maxArea = 10000000
 
     # blob is not circular
     params.filterByCircularity = True
-    params.minCircularity = 0.25
+    params.minCircularity = 0.5
 
     # blob is not convex - cubes does not bulge outwards
     params.filterByConvexity = False
@@ -60,6 +58,8 @@ def detect_blob(mask):
     # cv2.moveWindow("Blobs Detected", 640, -75)
     # cv2.waitKey(0)
     # cv2.destroyAllWindows()
+
+    marked_mask = cv2.drawKeypoints(mask, keypoints, np.array([]), (0, 0, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
     return keypoints
 
