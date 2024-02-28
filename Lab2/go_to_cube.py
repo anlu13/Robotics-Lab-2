@@ -21,12 +21,12 @@ def nothing(x):
 # YELLOW_LOWER = np.array([10, 60, 118])
 # YELLOW_UPPER = np.array([80, 255, 230])
 
-GREEN_LOWER = np.array([20, 20, 20])
+GREEN_LOWER = np.array([15, 20, 20])
 GREEN_UPPER = np.array([120, 255, 175])
 
 CLOSE_RADIUS = 60
 CENTER_X = 160
-DIRECTION_BOUND = 10
+DIRECTION_BOUND = 20
 
 # Define a decorator as a subclass of Annotator; displays the keypoint
 class BoxAnnotator(cozmo.annotate.Annotator):
@@ -103,10 +103,7 @@ async def run(robot: cozmo.robot.Robot):
                     # if far from cube
                     elif cube[2] < CLOSE_RADIUS:
                         await robot.drive_straight(cozmo.util.distance_inches(1), cozmo.util.speed_mmps(50)).wait_for_completed()
-
-
-
-
+                time.sleep(0.25)
 
 
     except KeyboardInterrupt:

@@ -33,7 +33,7 @@ def detect_blob(mask):
 
     # blob is not circular
     params.filterByCircularity = True
-    params.minCircularity = 0.5
+    params.minCircularity = 0.3
 
     # blob is not convex - cubes does not bulge outwards
     params.filterByConvexity = False
@@ -60,6 +60,7 @@ def detect_blob(mask):
     # cv2.destroyAllWindows()
 
     marked_mask = cv2.drawKeypoints(mask, keypoints, np.array([]), (0, 0, 255), cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
+    cv2.imwrite("marked_mask.png", marked_mask)
 
     return keypoints
 
