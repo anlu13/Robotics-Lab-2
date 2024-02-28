@@ -5,9 +5,8 @@ import time
 def filter_image(img, hsv_lower, hsv_upper):
     cv2.imwrite("img.png", img)
 
-
     hsv_img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-    blurred_hsv = cv2.medianBlur(hsv_img, 11)
+    blurred_hsv = cv2.medianBlur(hsv_img, 15)
     mask = cv2.inRange(blurred_hsv, hsv_lower, hsv_upper)
 
     # cv2.imwrite("mask.png", mask)
@@ -39,7 +38,7 @@ def detect_blob(mask):
 
     # blob is not circular
     params.filterByCircularity = True
-    params.minCircularity = 0.5
+    params.minCircularity = 0.3
 
     # blob is not convex - cubes does not bulge outwards
     params.filterByConvexity = False

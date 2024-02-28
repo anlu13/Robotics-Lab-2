@@ -21,8 +21,9 @@ def nothing(x):
 # YELLOW_LOWER = np.array([10, 60, 118])
 # YELLOW_UPPER = np.array([80, 255, 230])
 
-GREEN_LOWER = np.array([20, 20, 20])
+GREEN_LOWER = np.array([11, 20, 25])
 GREEN_UPPER = np.array([120, 255, 175])
+
 
 CLOSE_RADIUS = 60
 CENTER_X = 160
@@ -86,23 +87,28 @@ async def run(robot: cozmo.robot.Robot):
                 ################################################################
 
                 # if no cube
-                # if cube == [0, 0, 0] or cube == None:
-                #     # spin to find cube
-                #     await robot.turn_in_place(cozmo.util.degrees(30)).wait_for_completed()
+                if cube == [0, 0, 0] or cube == None:
+                    # spin to find cube
+                    await robot.turn_in_place(cozmo.util.degrees(30)).wait_for_completed()
+                    time.sleep(1)
 
-                # # if cube
-                # else: 
-                #     # if cube too far right
-                #     if cube[0] > CENTER_X + DIRECTION_BOUND:
-                #         # turn right slightly
-                #         await robot.turn_in_place(cozmo.util.degrees(-3)).wait_for_completed()
-                #     # if cube too far left
-                #     elif cube[0] < CENTER_X - DIRECTION_BOUND:
-                #         # turn left slightly
-                #         await robot.turn_in_place(cozmo.util.degrees(3)).wait_for_completed()
-                #     # if far from cube
-                #     elif cube[2] < CLOSE_RADIUS:
-                #         await robot.drive_straight(cozmo.util.distance_inches(1), cozmo.util.speed_mmps(50)).wait_for_completed()
+                # if cube
+                else: 
+                    # if cube too far right
+                    if cube[0] > CENTER_X + DIRECTION_BOUND:
+                        # turn right slightly
+                        await robot.turn_in_place(cozmo.util.degrees(-3)).wait_for_completed()
+                        time.sleep(1)
+                    # if cube too far left
+                    elif cube[0] < CENTER_X - DIRECTION_BOUND:
+                        # turn left slightly
+                        await robot.turn_in_place(cozmo.util.degrees(3)).wait_for_completed()
+                        time.sleep(1)
+                    # if far from cube
+                    elif cube[2] < CLOSE_RADIUS:
+                        await robot.drive_straight(cozmo.util.distance_inches(1), cozmo.util.speed_mmps(50)).wait_for_completed()
+                        time.sleep(1)
+
 
 
 
